@@ -53,10 +53,14 @@ export default function AboutScreen() {
             <Header
               placement="center"
               centerComponent={{ text: 'Cuenta', style: styles.heading }}
-            >
+            />
               <Button
               onPress={()=>eliminarCarrito()}
               style={styles.buttonContainer}
+              containerStyle={{
+                position:'absolute',
+                top:33,
+                left:'85%'}}
               type="clear"
               icon={
                 <Icon
@@ -66,7 +70,6 @@ export default function AboutScreen() {
                 />
               }
               />
-            </Header>
               {carrito.length>0 ?
               <View style={styles.container3}>
                 <Text style={styles.texto}>Total: {total} pesos</Text>
