@@ -1,42 +1,67 @@
 import React, {useContext} from 'react'
-import { StyleSheet, Text, View, ScrollView, Button, Alert} from 'react-native'
-import { Header, Card } from 'react-native-elements';
+import { StyleSheet, Text, View, ScrollView} from 'react-native'
+import { Header, Card, Button } from 'react-native-elements';
 import {LibrosContext} from '../Context/LibrosContext';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const HomeScreen = () => {
-    const {catalogo,agregar} = useContext(LibrosContext);
+    const {catalogo,agregar,agregarCarrito} = useContext(LibrosContext);
     return (
         <ScrollView>
             <Header
               placement="center"
               centerComponent={{ text: 'Inicio', style: styles.heading }}
             />
-                <View style={styles.container}>
+        <View style={styles.container}>
+            {catalogo.map((e,i)=>{
+                return(
+                    <Card  
+                    containerStyle={{
+                        width: '95%',
+                        marginBottom: 10
+                    }} 
+                    key={i}>
+                        <Card.Title>{e.titulo}</Card.Title> 
+                        <Card.Divider/>
+                        <View>
+                            <Text>Precio: ${e.precio} pesos</Text>
+                            <Text>Idioma: {e.idioma}</Text>
+                            <View style={styles.containerIcons}>
+                                <Button
+                                onPress={
+                                    ()=> agregarCarrito(e)
+                                }
+                                type="clear"
+                                icon={
+                                  <Icon
+                                    name="shopping-cart"
+                                    size={25}
+                                    color="blue"
+                                  />
+                                }
+                                />
+                                <Button
+                                onPress={()=> (
+                                agregar(e)
+                                )}
+                                type="clear"
+                                icon={
+                                  <Icon
+                                    name="heart"
+                                    size={25}
+                                    color={e.color}
+                                  />
+                                }
+                                />
+                            </View>
+                        </View>
+                    </Card>
+                );
+            })
+            }
+        </View>
+
                     
-                        {catalogo.map((e,i)=>{
-                            return(
-                                <Card  
-                                containerStyle={{
-                                    width: '95%'
-                                }} 
-                                key={i}>
-                                    <Card.Title>{e.titulo}</Card.Title> 
-                                    <Card.Divider/>
-                                    <View>
-                                        <Text>Precio: ${e.precio}</Text>
-                                        <Text>Idioma: {e.idioma}</Text>
-                                        <View style={styles.containerIcons}>
-                                            <Ionicons name="cart" color="blue" size="large"/>
-                                            <Ionicons name="heart" color="gray" size="large"/>
-                                        </View>
-                                    </View>
-                                </Card>
-                            );
-                        })
-                        }
-                    
-                </View> 
         </ScrollView>
     )
 }
@@ -51,8 +76,10 @@ const styles = StyleSheet.create({
     },
     heading: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 22,
         fontWeight: 'bold',
+        paddingTop:5,
+        paddingBottom:5,
     },
     containerIcons:{
         flexDirection:'row',

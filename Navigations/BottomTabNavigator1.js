@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {View} from 'react-native'
+import {Badge} from 'react-native-elements'
 import WishListScreen from '../Screens/WishListScreen';
 import AccountScreen from '../Screens/AccountScreen';
 import HomeScreen from '../Screens/HomeScreen';
+import {LibrosContext} from '../Context/LibrosContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator1(){
+    const {cantidadVerificar,cantidad}= useContext(LibrosContext);
     return(
         <Tab.Navigator
             screenOptions={{
@@ -47,16 +51,45 @@ export default function BottomTabNavigator1(){
                     )
                 }}
             />
+            {cantidad>0 ?
             <Tab.Screen
-                name="Cuenta"
-                component={AccountScreen}
-                options={{
-                    tabBarLabel:"Cuenta",
-                    tabBarIcon:({color})=>(
-                        <Ionicons name={"cart"} size={20} color={color}/>
-                    )
+            name="Cuenta"
+            component={AccountScreen}
+            options={{
+                tabBarLabel:"Cuenta",
+                tabBarIcon:({color})=>(
+                    <View>
+                    <Ionicons 
+                        containerStyle={{backgroundColor:'black'}}
+                        name={"cart"} size={22} color={color}/>
+                    <Badge
+                        value={cantidadVerificar()}
+                        status="error"
+                        textStyle={{fontSize:8}}
+                        containerStyle={{ position: 'absolute', top:-5, right:-9 }}
+                    />  
+                    </View>
+  
+                )
                 }}
             />
+            :
+            <Tab.Screen
+            name="Cuenta"
+            component={AccountScreen}
+            options={{
+                tabBarLabel:"Cuenta",
+                tabBarIcon:({color})=>(
+                    <Ionicons 
+                    containerStyle={{
+                        position:'relative'
+                    }}
+                    name={"cart"} size={22} color={color}>
+                    </Ionicons>
+                )
+                }}
+            />
+            }
         </Tab.Navigator>
     )
 }
