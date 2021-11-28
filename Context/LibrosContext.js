@@ -46,24 +46,24 @@ const LibreriaProvider = (props)=>{
     }
   //Funcion para agregar al carrito
   const agregarCarrito = (libro)=>{
-    let temporal= catalogo;
+    let temporal= catalogo.find((element)=>element.codigo===libro.codigo);;
     let temporalCantidad=cantidad;
     temporalCantidad= temporalCantidad+1;
     setCantidad(temporalCantidad);
-    let index= catalogo.findIndex((element)=>element.codigo===libro.codigo);
     let exist = carrito.find((element)=>element.codigo===libro.codigo);
     if(exist!=undefined){
-      carrito[index].cantidad++;
-      carrito[index].importe=carrito[index].cantidad * carrito[index].precio;
-      setCarrito(carrito);
-      setTotal(total+temporal[index].precio);
+      temporal.cantidad++;
+      temporal.importe=temporal.cantidad * temporal.precio;
+      setCarrito([...carrito]);
+      setTotal(total+temporal.precio);
       Alert.alert('Se agrego a carrito');
     }else{
-      temporal[index]['cantidad']=1;
-      temporal[index]['importe']=temporal[index].cantidad * temporal[index].precio;
-      setCarrito([...carrito,temporal[index]]);
-      setTotal(total+temporal[index].precio); 
+      temporal['cantidad']=1;
+      temporal['importe']=temporal.cantidad * temporal.precio;
+      setCarrito([...carrito,temporal]);
+      setTotal(total+temporal.precio); 
       Alert.alert('Se agrego a carrito');
+      console.log('carrito',carrito);
     }
   } 
   //Comprar
@@ -74,7 +74,6 @@ const LibreriaProvider = (props)=>{
   //Eliminar compra carrito
   const eliminar=(libro)=>{
     let temporal = carrito.find(element=>element.codigo===libro.codigo);
-    let index= catalogo.findIndex((element)=>element.codigo===libro.codigo);
     let tempObj=carrito.filter(element=>element.codigo!==libro.codigo)
     let temporalCantidad=cantidad;
     temporalCantidad= temporalCantidad-1;
@@ -87,8 +86,9 @@ const LibreriaProvider = (props)=>{
           setCarrito(tempObj);
         }
     }else{
-      carrito[index].cantidad--;
-      carrito[index].importe=temporal.cantidad * temporal.precio;
+      temporal.cantidad--;
+      temporal.importe=temporal.cantidad * temporal.precio;
+      setCarrito([...carrito]);
     }
     setTotal(total-temporal.precio);
   }
